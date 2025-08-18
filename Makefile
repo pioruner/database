@@ -7,7 +7,7 @@ OUT_DIR=./pkg/grpc
 PROTOC_GEN_GO=$(shell command -v protoc-gen-go 2> /dev/null)
 PROTOC_GEN_GO_GRPC=$(shell command -v protoc-gen-go-grpc 2> /dev/null)
 
-.PHONY: proto run build clean check-tools install-tools update
+.PHONY: proto run build clean check-tools install-tools
 
 check-tools:
 ifndef PROTOC_GEN_GO
@@ -29,15 +29,12 @@ proto: check-tools
 		$(PROTO_FILE)
 	go mod tidy
 
-run:
+run: proto
 	go run main.go
 
-build:
+build: proto
 	go build -o $(APP_NAME) main.go
 
 clean:
 	rm -f $(APP_NAME)
 	rm -f $(OUT_DIR)/*.pb.go
-
-update:
-	go mod tidy
