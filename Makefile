@@ -1,15 +1,17 @@
 APP_NAME=database
-
 PROTOC=protoc
-PROTO_FILES=$(wildcard *.proto)
+PROTO_FILE=proto.proto
+PROTO_PATH=.
+OUT_DIR=./pkg/grpc
 
 .PHONY: proto run build clean
 
 proto:
-	$(PROTOC) --go_out=. --go-grpc_out=. \
+	$(PROTOC) --proto_path=$(PROTO_PATH) \
+		--go_out=$(OUT_DIR) --go-grpc_out=$(OUT_DIR) \
 		--go_opt=paths=source_relative \
 		--go-grpc_opt=paths=source_relative \
-		$(PROTO_FILES)
+		$(PROTO_FILE)
 
 run:
 	go run main.go
@@ -19,4 +21,4 @@ build:
 
 clean:
 	rm -f $(APP_NAME)
-	rm -f *.pb.go
+	rm -f $(OUT_DIR)/*.pb.go

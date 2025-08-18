@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package transfer;
+package grpc;
 
 // указываем go_package: имя модуля из go.mod + ; + имя пакета
-option go_package = "ggithub.com/pioruner/database;proto";
+option go_package = "github.com/pioruner/database/pkg/grpc;grpc";
 
 
 service TransferService {
