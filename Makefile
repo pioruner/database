@@ -29,7 +29,7 @@ proto: check-tools
 		$(PROTO_FILE)
 	go mod tidy
 
-run: proto
+run: 
 	go run main.go
 
 build: proto

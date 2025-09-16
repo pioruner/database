@@ -7,6 +7,7 @@ import (
 
 	"github.com/pioruner/database/pkg/base"
 	pb "github.com/pioruner/database/pkg/grpc"
+	"github.com/pioruner/database/pkg/ui"
 	"google.golang.org/grpc"
 )
 
@@ -20,6 +21,7 @@ func (s *server) Ping(ctx context.Context, req *pb.PingRequest) (*pb.PingRespons
 }
 
 func main() {
+
 	it := base.Item{ID: 1, Name: "1", Number: "1"}
 	println(it.ID, it.Name, it.Number)
 
@@ -32,8 +34,6 @@ func main() {
 	pb.RegisterTransferServiceServer(grpcServer, &server{})
 
 	log.Println("gRPC server is running on :50051")
-	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
-
+	go grpcServer.Serve(lis)
+	ui.UI_Call()
 }
