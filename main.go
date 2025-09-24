@@ -7,7 +7,9 @@ import (
 
 	"github.com/pioruner/database/pkg/base"
 	pb "github.com/pioruner/database/pkg/grpc"
-	"github.com/pioruner/database/pkg/ui"
+
+	//"github.com/pioruner/database/pkg/ui"
+	"github.com/pioruner/database/pkg/gio"
 	"google.golang.org/grpc"
 )
 
@@ -35,5 +37,7 @@ func main() {
 
 	log.Println("gRPC server is running on :50051")
 	go grpcServer.Serve(lis)
-	ui.UI_Call()
+	//ui.UI_Call()
+	gio.RunUI()
+
 }

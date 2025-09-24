@@ -11,13 +11,27 @@ VERSION := $(shell git describe --tags --always --dirty)
 PROTOC_GEN_GO=$(shell command -v protoc-gen-go 2> /dev/null)
 PROTOC_GEN_GO_GRPC=$(shell command -v protoc-gen-go-grpc 2> /dev/null)
 
-.PHONY: proto run build clean check-tools install-tools \
+.PHONY: proto run build clean check-tools install-tools deps \
         build-win release-win-amd64 release-win-arm64 \
         release-linux-amd64 release-linux-arm64 \
         release-mac-amd64 release-mac-arm64 \
         release-all
 
-check-tools:
+deps:
+	@if [ -z "$(PROTOC_GEN_GO)" ]; then \
+		echo ">> Installing protoc-gen-go..."; \
+		go install google.golang.org/protobuf/cmd/protoc-gen-go@latest; \
+	else \
+		echo ">> protoc-gen-go found: $(PROTOC_GEN_GO)"; \
+	fi
+	@if [ -z "$(PROTOC_GEN_GO_GRPC)" ]; then \
+		echo ">> Installing protoc-gen-go-grpc..."; \
+		go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest; \
+	else \
+		echo ">> protoc-gen-go-grpc found: $(PROTOC_GEN_GO_GRPC)"; \
+	fi
+
+check-tools: deps
 ifndef PROTOC_GEN_GO
 	$(error "protoc-gen-go not found. Run 'make install-tools'")
 endif
@@ -28,6 +42,8 @@ endif
 install-tools:
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+
 
 proto: check-tools
 	$(PROTOC) --proto_path=$(PROTO_PATH) \
